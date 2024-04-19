@@ -188,7 +188,7 @@ INSERT INTO `answers` (`id`, `question_id`, `answer`, `is_correct`) VALUES
 
 
 
-CREATE TABLE `highscore` (
+CREATE TABLE `highscores` (
   `user` varchar(32) NOT NULL,
   `score` int(32) NOT NULL,
   `date_added` datetime DEFAULT current_timestamp()
@@ -196,7 +196,7 @@ CREATE TABLE `highscore` (
 
 
 
-INSERT INTO `highscore` (`user`, `score`, `date_added`) VALUES
+INSERT INTO `highscores` (`user`, `score`, `date_added`) VALUES
 ('dave', 500, '2024-04-17 14:47:43'),
 ('NewUser', 100, '2024-04-17 14:47:43'),
 ('micha', 500, '2024-04-17 14:47:43'),
