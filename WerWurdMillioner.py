@@ -37,3 +37,4 @@ def close_connection():
 
 # Close the connection to the MySQL database
 # close_connection()
+##
