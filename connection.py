@@ -1,63 +1,48 @@
+from sqlalchemy import create_engine, MetaData, Table, insert
+import logging
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
 
 #
 
-from sqlalchemy import create_engine, MetaData, Table, insert
-
-def add_user_score(username, score):
+def addUserScore(username, score, db_connection):
     try:
-        # Creating the engine
-        engine = create_engine("mysql+mysqlconnector://root:@localhost:3306/backend")
-        
         # Reflecting the database tables
         metadata = MetaData()
-        metadata.reflect(bind=engine)
+        metadata.reflect(bind=db_connection)
 
         # Accessing the tables
-        highscore_table = Table('highscore', metadata, autoload=True, autoload_with=engine)
+        highscore_table = Table('highscore', metadata, autoload=True, autoload_with=db_connection)
 
-        # Establishing a connection
-        with engine.connect() as connection:
-            # Adding a new user with score
-            new_user_score = {'user': username, 'score': score}
-            connection.execute(insert(highscore_table).values(new_user_score))
-            # Commit the transaction
-            connection.commit()
-            
-            print(f"User '{username}' with score '{score}' added successfully.")
+        # Adding a new user with score
+        new_user_score = {'user': username, 'score': score}
+        db_connection.execute(insert(highscore_table).values(new_user_score))
+        logging.info(f"User '{username}' with score '{score}' added successfully.")
 
     except Exception as e:
-        print("An error occurred:", e)
+        logging.error(f"An error occurred while adding user score: {e}")
 
-def clear_user_scores(username):
+def clearUserScores(username, db_connection):
     try:
-        # Creating the engine
-        engine = create_engine("mysql+mysqlconnector://root:@localhost:3306/backend")
-        
         # Reflecting the database tables
         metadata = MetaData()
-        metadata.reflect(bind=engine)
+        metadata.reflect(bind=db_connection)
 
         # Accessing the tables
-        highscore_table = Table('highscore', metadata, autoload=True, autoload_with=engine)
+        highscore_table = Table('highscore', metadata, autoload=True, autoload_with=db_connection)
 
-        # Establishing a connection
-        with engine.connect() as connection:
-            # Deleting user scores
-            delete_statement = highscore_table.delete().where(highscore_table.c.user == username)
-            connection.execute(delete_statement)
-            
-            # Commit the transaction
-            connection.commit()
-            
-            print(f"All scores for user '{username}' cleared successfully.")
+        # Deleting user scores
+        delete_statement = highscore_table.delete().where(highscore_table.c.user == username)
+        db_connection.execute(delete_statement)
+        logging.info(f"All scores for user '{username}' cleared successfully.")
 
     except Exception as e:
-        print("An error occurred:", e)
-
-
-
+        logging.error(f"An error occurred while clearing user scores: {e}")
 
 if __name__ == "__main__":
+    db_engine = create_engine("mysql+mysqlconnector://root:@localhost:3306/backend")
+
     # Example usage:
-    add_user_score("steve", 500)
-    #clear_user_scores()
+    addUserScore("steve", 500, db_engine)
+    # clearUserScores("steve", db_engine)  # Uncomment this line to clear user scores
