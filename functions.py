@@ -1,5 +1,9 @@
-
+import logging
+import mysql.connector
 from connection import getConnection
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)  # Set the logging level as needed
 
 def getRandomQuestion():
     connection = getConnection()
@@ -11,7 +15,7 @@ def getRandomQuestion():
             randomQuestion = cursor.fetchone()
             return randomQuestion
         except mysql.connector.Error as error:
-            print("Error:", error)
+            logging.error("Error occurred: %s", error)  # Log the error
             return None
         finally:
             if cursor:
@@ -23,9 +27,9 @@ def getRandomQuestion():
 if __name__ == "__main__":
     randomQuestion = getRandomQuestion()
     if randomQuestion:
-        print("Random Question:")
-        print("ID:", randomQuestion['id'])
-        print("Difficulty:", randomQuestion['difficulty'])
-        print("Question:", randomQuestion['question'])
+        logging.info("Random Question:")
+        logging.info("ID: %s", randomQuestion['id'])
+        logging.info("Difficulty: %s", randomQuestion['difficulty'])
+        logging.info("Question: %s", randomQuestion['question'])
     else:
-        print("No questions found.")
+        logging.info("No questions found.")
