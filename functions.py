@@ -5,15 +5,29 @@ from connection import getConnection
 # Configure logging
 logging.basicConfig(level=logging.INFO)  # Set the logging level as needed
 
-def getRandomQuestion():
+def getRandomQuestionWithAnswers():
     connection = getConnection()
     if connection:
         try:
             cursor = connection.cursor(dictionary=True)
-            # Query for a random question
-            cursor.execute("SELECT * FROM questions ORDER BY RAND() LIMIT 1")
+            # Select a random question
+            cursor.execute("SELECT id, difficulty, question FROM questions ORDER BY RAND() LIMIT 1")
             randomQuestion = cursor.fetchone()
-            return randomQuestion
+            if randomQuestion:
+                # Fetch all answers for the selected question
+                cursor.execute("SELECT answer, is_correct FROM answers WHERE question_id = %s", (randomQuestion['id'],))
+                answers = cursor.fetchall()
+                # Construct the array with difficulty, question, and answers
+                questionWithAnswers = {
+                    "difficulty": randomQuestion['difficulty'],
+                    "question": randomQuestion['question'],
+                    "answers": answers
+                }
+                return questionWithAnswers
+                
+            else:
+                logging.info("No questions found.")
+                return None
         except mysql.connector.Error as error:
             logging.error("Error occurred: %s", error)  # Log the error
             return None
@@ -25,11 +39,17 @@ def getRandomQuestion():
         return None
 
 if __name__ == "__main__":
-    randomQuestion = getRandomQuestion()
-    if randomQuestion:
+    
+    randomQuestionWithAnswers = getRandomQuestionWithAnswers()
+    if randomQuestionWithAnswers:
+        print(randomQuestionWithAnswers)
         logging.info("Random Question:")
-        logging.info("ID: %s", randomQuestion['id'])
-        logging.info("Difficulty: %s", randomQuestion['difficulty'])
-        logging.info("Question: %s", randomQuestion['question'])
+        logging.info("Difficulty: %s", randomQuestionWithAnswers['difficulty'])
+        logging.info("Question: %s", randomQuestionWithAnswers['question'])
+        logging.info("Answers:")
+        
+        for answer in randomQuestionWithAnswers['answers']:
+            logging.info("- %s (Correct: %s)", answer['answer'], answer['is_correct'])
+            
     else:
         logging.info("No questions found.")
