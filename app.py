@@ -16,7 +16,7 @@ connection = mysql.connector.connect(
 )
 
 # Function to fetch all questions from the database
-def get_all_questions():
+def getAllQuestions():
     try:
         cursor = connection.cursor()
         query = 'SELECT * FROM questions'
@@ -29,15 +29,15 @@ def get_all_questions():
 
 # Route to get all questions
 @app.route('/questions')
-def get_questions():
-    questions = get_all_questions()
+def getQuestions():
+    questions = getAllQuestions()
     if questions is not None:
         return jsonify(questions), 200
     else:
         return jsonify({"error": "Failed to fetch questions"}), 500
 
 # Function to fetch all answers from the database
-def get_all_answers():
+def getAllAnswers():
     try:
         cursor = connection.cursor()
         query = 'SELECT * FROM answers'
@@ -50,8 +50,8 @@ def get_all_answers():
 
 # Route to get all answers
 @app.route('/answers')
-def get_answers():
-    answers = get_all_answers()
+def getAnswers():
+    answers = getAllAnswers()
     if answers is not None:
         return jsonify(answers), 200
     else:
@@ -59,7 +59,7 @@ def get_answers():
 
 # Close the connection to the MySQL database when the application ends
 @app.teardown_appcontext
-def close_connection(exception=None):
+def closeConnection(exception=None):
     if connection.is_connected():
         connection.close()
         logging.info('Connection to MySQL database closed')
