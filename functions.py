@@ -4,6 +4,28 @@ from connection import getConnection
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)  # Set the logging level as needed
+def isCorrect(QuestionId, answer):
+    connection = getConnection()
+    if connection:
+        try:
+            cursor = connection.cursor(dictionary=True)
+            cursor.execute("SELECT is_correct FROM answers  WHERE question_id = %s AND answer = %s",(QuestionId,answer))
+            isCorrectBoolean = cursor.fetchone()
+            if(isCorrectBoolean["is_correct"]==1):
+                return True;
+            else:
+                return False;
+    
+        except mysql.connector.Error as error:
+            logging.error("Error occurred: %s", error)  # Log the error
+            return None
+        finally:
+            if cursor:
+                cursor.close()
+            connection.close()
+    else:
+        return None
+
 
 def getRandomQuestionWithAnswers():
     connection = getConnection()
@@ -40,6 +62,7 @@ def getRandomQuestionWithAnswers():
 
 if __name__ == "__main__":
     
+    isCorrectValue = isCorrect(5,"Oktober")  # test aufruf von isCorrect
     randomQuestionWithAnswers = getRandomQuestionWithAnswers()
     if randomQuestionWithAnswers:
         print(randomQuestionWithAnswers)
@@ -47,6 +70,7 @@ if __name__ == "__main__":
         logging.info("Difficulty: %s", randomQuestionWithAnswers['difficulty'])
         logging.info("Question: %s", randomQuestionWithAnswers['question'])
         logging.info("Answers:")
+        print("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD",isCorrectValue) #langer dddd..string um es im terminal leichter zu finden
         
         for answer in randomQuestionWithAnswers['answers']:
             logging.info("- %s (Correct: %s)", answer['answer'], answer['is_correct'])
