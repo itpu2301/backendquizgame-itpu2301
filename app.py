@@ -9,7 +9,7 @@ logging.basicConfig(level=logging.INFO)
 
 # Route to check if an answer is correct
 @app.route('/is_correct/<int:question_id>/<answer>', methods=['GET'])
-def check_answer(question_id, answer):
+def checkAnswer(question_id, answer):
     correct = isCorrect(question_id, answer)
     if correct is not None:
         return jsonify({"correct": correct}), 200
@@ -18,7 +18,7 @@ def check_answer(question_id, answer):
 
 # Route to get a random question with answers
 @app.route('/random_question', methods=['GET'])
-def get_random_question():
+def getRandomQuestion():
     question = getRandomQuestionWithAnswers()
     if question is not None:
         return jsonify(question), 200
