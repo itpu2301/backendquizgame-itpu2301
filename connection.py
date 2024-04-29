@@ -9,9 +9,6 @@ dbConfig = {
     'database': 'quizgame'
 }
 
-# Configure logging
-logging.basicConfig(level=logging.INFO)  # You can adjust the log level as needed
-
 # Function to establish a connection
 def getConnection():
     try:
