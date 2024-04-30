@@ -1,2 +1,2 @@
 # quizGameBackend
- Backend part for a quizGame
+ Backend part for a quizGame with api 
