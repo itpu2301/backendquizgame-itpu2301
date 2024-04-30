@@ -1,5 +1,5 @@
 import logging
-from quizGameBackend.score import getRandomQuestionWithAnswers
+from functions import getRandomQuestionWithAnswers
 from unittest.mock import MagicMock, patch
 
 # Mocken der getConnection-Funktion
