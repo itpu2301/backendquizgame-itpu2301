@@ -11,7 +11,7 @@ from connection import getConnection  # Assuming connection.py is in the parent 
 class TestConnection(unittest.TestCase):
     
     @patch('mysql.connector.connect')
-    def testGetConnectionSuccess(self, mock_connect):
+    def test_GetConnectionSuccess(self, mock_connect):
         # Mocking the successful connection
         mock_connection = MagicMock(spec=mysql.connector.connection.MySQLConnection)
         mock_connect.return_value = mock_connection
@@ -24,7 +24,7 @@ class TestConnection(unittest.TestCase):
         mock_connect.assert_called_once_with(host='localhost', user='root', password='12345678', database='quizgame')
 
     @patch('mysql.connector.connect')
-    def testGetConnectionFailure(self, mock_connect):
+    def test_GetConnectionFailure(self, mock_connect):
         # Mocking the connection failure
         mock_connect.side_effect = mysql.connector.Error("Connection error")
 

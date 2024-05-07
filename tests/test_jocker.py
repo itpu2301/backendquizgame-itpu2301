@@ -1,13 +1,10 @@
 import sys
-sys.path.append('../')  # Passe den Pfad entsprechend deiner Verzeichnisstruktur an
-
+sys.path.append('../')
 import pytest
-import mysql.connector
 from unittest.mock import MagicMock, patch
 from jocker import hasUserUsedJoker, addJokerEntry
 from connection import dbConfig
 
-# Mocking the mysql.connector.connect function
 @patch('mysql.connector.connect')
 def test_hasUserUsedJoker(mock_connect):
     # Mocking the cursor and its execute method
@@ -21,7 +18,7 @@ def test_hasUserUsedJoker(mock_connect):
     # Assertions
     assert result is True
     mock_connect.assert_called_once_with(**dbConfig)
-    mock_cursor.execute.assert_called_once()
+    mock_cursor.execute.assert_called_once_with("SELECT COUNT(*) FROM jocker WHERE kandidat = %s", ("Testkandidat2",))
 
 @patch('mysql.connector.connect')
 def test_addJokerEntry(mock_connect):
@@ -34,5 +31,4 @@ def test_addJokerEntry(mock_connect):
 
     # Assertions
     mock_connect.assert_called_once_with(**dbConfig)
-    mock_cursor.execute.assert_called_once()
-    mock_cursor.execute.assert_called_with("INSERT INTO jocker (kandidat, used) VALUES (%s, %s)", ("Testkandidat3", 1))
+    mock_cursor.execute.assert_called_once_with("INSERT INTO jocker (kandidat, used) VALUES (%s, %s)", ("Testkandidat3", 1))

@@ -1,14 +1,9 @@
 import mysql.connector
 from datetime import datetime
 import logging
+from connection import dbConfig
 
-# Definiere die Datenbankverbindung
-dbConfig = {
-    'host': 'localhost',
-    'user': 'root',
-    'password': '12345678',
-    'database': 'quizgame'
-}
+
 
 # Funktion zur Überprüfung, ob der Benutzer den Joker bereits verwendet hat
 def hasUserUsedJoker(kandidat):
