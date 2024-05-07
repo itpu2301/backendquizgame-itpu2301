@@ -1,8 +1,10 @@
 from flask import Flask, jsonify
+from flask_cors import CORS
 import logging
 from functions import isCorrect, getRandomQuestionWithAnswers
 
 app = Flask(__name__)
+CORS(app, origins=["http://localhost:5173"])
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
