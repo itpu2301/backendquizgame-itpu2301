@@ -4,7 +4,7 @@ import logging
 from functions import isCorrect, getRandomQuestionWithAnswers
 
 app = Flask(__name__)
-CORS(app)
+cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
