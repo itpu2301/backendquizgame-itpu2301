@@ -10,9 +10,9 @@ CORS(app, origins=["http://localhost:5173"])
 logging.basicConfig(level=logging.INFO)
 
 # Route to check if an answer is correct
-@app.route('/is_correct/<int:question_id>/<answer>', methods=['GET'])
-def checkAnswer(question_id, answer):
-    correct = isCorrect(question_id, answer)
+@app.route('/is_correct/<int:question_id>/<int:id>', methods=['GET'])
+def checkAnswer(question_id, id):
+    correct = isCorrect(question_id, id)
     if correct is not None:
         return jsonify({"correct": correct}), 200
     else:
