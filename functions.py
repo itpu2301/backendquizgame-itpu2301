@@ -1,4 +1,5 @@
 import logging
+import mysql.connector
 from connection import getConnection
 
 # Configure logging
@@ -34,7 +35,7 @@ def getRandomQuestionWithAnswers():
             cursor.execute("SELECT id, difficulty, question FROM questions ORDER BY RAND() LIMIT 1")
             randomQuestion = cursor.fetchone()
             if randomQuestion:
-                cursor.execute("SELECT answer, is_correct FROM answers WHERE question_id = %s", (randomQuestion['id'],))
+                cursor.execute("SELECT question_id, id, answer FROM answers WHERE question_id = %s", (randomQuestion['id'],))
                 answers = cursor.fetchall()
                 questionWithAnswers = {
                     "difficulty": randomQuestion['difficulty'],
