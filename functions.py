@@ -27,18 +27,18 @@ def isCorrect(QuestionId, id):
     else:
         return None
 
-def getRandomQuestionWithAnswers():
+def getRandomQuestionWithAnswers(difficulty):
     connection = getConnection()
     if connection:
         try:
             cursor = connection.cursor(dictionary=True)
-            cursor.execute("SELECT id, difficulty, question FROM questions ORDER BY RAND() LIMIT 1")
+            cursor.execute("SELECT id, question FROM questions WHERE difficulty = %s ORDER BY RAND() LIMIT 1", (difficulty,))
             randomQuestion = cursor.fetchone()
             if randomQuestion:
                 cursor.execute("SELECT id, answer FROM answers WHERE question_id = %s", (randomQuestion['id'],))
                 answers = cursor.fetchall()
                 questionWithAnswers = {
-                    "difficulty": randomQuestion['difficulty'],
+                    "difficulty": difficulty,
                     "question": randomQuestion['question'],
                     "answers": answers,
                     "question_id": randomQuestion['id']
@@ -46,7 +46,7 @@ def getRandomQuestionWithAnswers():
                 return questionWithAnswers
                 
             else:
-                logging.info("No questions found.")
+                logging.info("No questions found for difficulty level %s.", difficulty)
                 return None
         except mysql.connector.Error as error:
             logging.error("Error occurred: %s", error)
@@ -57,3 +57,4 @@ def getRandomQuestionWithAnswers():
             connection.close()
     else:
         return None
+
