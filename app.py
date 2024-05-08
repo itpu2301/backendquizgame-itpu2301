@@ -1,7 +1,7 @@
 from flask import Flask, jsonify
 from flask_cors import CORS
 import logging
-from functions import isCorrect, getRandomQuestionWithAnswers
+from functions import isCorrect, getRandomQuestionWithAnswers, showHighscore
 
 app = Flask(__name__)
 CORS(app, origins=["http://localhost:5173"])
@@ -27,6 +27,13 @@ def random_question(difficulty):
     else:
         return jsonify({"error": "No questions found for the specified difficulty level."}), 404
 
+@app.route('/showhighscore', methods=['GET'])
+def getHighscore():
+    highscoreTable = showHighscore()
+    if highscoreTable:
+        return jsonify(highscoreTable)
+    else:
+        return jsonify({"error": "No Highscore found."}), 404
 
 if __name__ == '__main__':
     app.run(debug=True)

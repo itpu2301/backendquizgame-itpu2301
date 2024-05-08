@@ -57,4 +57,22 @@ def getRandomQuestionWithAnswers(difficulty):
             connection.close()
     else:
         return None
-
+    
+def showHighscore():
+    connection = getConnection()
+    if connection:
+        try:
+            cursor = connection.cursor(dictionary=True)
+            cursor.execute("SELECT user, score, date_added FROM highscores ORDER BY score DESC")
+            highscoreTable = cursor.fetchall()
+            return highscoreTable
+ 
+        except mysql.connector.Error as error:
+            logging.error("Error occurred: %s", error)
+            return None
+        finally:
+            if cursor:
+                cursor.close()
+            connection.close()
+    else:
+        return None
