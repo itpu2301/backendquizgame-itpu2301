@@ -1,13 +1,10 @@
 import mysql.connector
 import logging
+import traceback
+from config import dbConfig
 
-# Define the database connection parameters
-dbConfig = {
-    'host': 'localhost',
-    'user': 'root',
-    'password': '12345678',
-    'database': 'quizgame'
-}
+
+
 
 # Function to establish a connection
 def getConnection():
@@ -16,4 +13,16 @@ def getConnection():
         return connection
     except mysql.connector.Error as error:
         logging.error("Error: %s", error)
+        logging.error("Error Class: %s", error.__class__.__name__)
+        logging.error("Traceback: %s", traceback.format_exc())
         return None
+
+
+connection = getConnection()
+if connection:
+    try:
+        
+        cursor = connection.cursor()
+       
+    finally:
+        connection.close()
