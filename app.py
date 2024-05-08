@@ -19,13 +19,14 @@ def checkAnswer(question_id, id):
         return jsonify({"error": "Failed to check answer"}), 500
 
 # Route to get a random question with answers
-@app.route('/random_question', methods=['GET'])
-def getRandomQuestion():
-    question = getRandomQuestionWithAnswers()
-    if question is not None:
+@app.route('/random_question/<int:difficulty>', methods=['GET'])
+def random_question(difficulty):
+    question = getRandomQuestionWithAnswers(difficulty)
+    if question:
         return jsonify(question), 200
     else:
-        return jsonify({"error": "Failed to get random question"}), 500
+        return jsonify({"error": "No questions found for the specified difficulty level."}), 404
+
 
 if __name__ == '__main__':
     app.run(debug=True)
