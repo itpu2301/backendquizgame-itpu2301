@@ -127,6 +127,9 @@ Scripts/
 # JupyterLab
 .jupyterlab-debug.log
 
+#dbconfig   
+config.py
+
 # Other
 .DS_Store
 Thumbs.db
