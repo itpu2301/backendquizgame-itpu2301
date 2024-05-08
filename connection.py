@@ -1,7 +1,10 @@
 import mysql.connector
 import logging
 import traceback
-from config import dbConfig
+
+
+# holt variablen aus der config.py
+from config import *
 
 
 
